@@ -1,0 +1,192 @@
+{% extends "dashboard/index_layout.html" %}
+{% load static %}
+{% block title %} Product {% endblock %}
+
+  
+{% block content %} 
+    <section class="content-header">
+        <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+            <h1>Products</h1>
+            </div>
+            <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item active">Widgets</li>
+            </ol>
+            </div>
+        </div>
+        </div>
+    </section>
+    
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 text-right">
+                    <a href="/Product_addProduct" class="btn btn-info">Add New Product</a>
+                </div>
+            </div>
+            <div>
+                {% if messages %}          
+                {% for message in messages %}
+                <div class="alert {{ message.tags }} alert-dismissible" id="msg" role="alert">
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                  {{ message }}
+                </div>
+                {% endfor %}
+                {% endif %} 
+              </div>
+
+            <div class="card mt-2" style="border: solid 2px #3330cc;">
+                <div class="card-header bg-primary">
+                <h3 class="card-title">Product List</h3>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                <table id="example1" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>NAME</th>
+                            <th>UNIT</th>
+                            <th>PRICE</th> 
+                            <th>ADDED ON</th> 
+                            <th>ACTIONS</th> 
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for pro in product %}
+                            <tr>
+                                <td>{{pro.name}}</td>
+                                <td>{{pro.unit}}</td>
+                                <td>{{pro.price}}</td>
+                                <td>{{pro.submitted_at}}</td>
+                                <td>
+                                    <div class="row">
+                                        <a href="Product_updateProduct/{{pro.id}}" class="btn btn-warning btn-sm d-inline">Edit</a>
+                                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modal-info-delete-product{{pro.id}}">
+                                             Delete
+                                        </button>
+                                        <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#modal-info{{pro.id}}">
+                                            View
+                                        </button>
+
+                                    </div>
+                                    
+                                </td>
+                            </tr>
+
+                            <div class="modal fade" id="modal-info{{pro.id}}">
+                                <div class="modal-dialog modal-lg">
+                                  <div class="modal-content bg-info">
+                                    <div class="modal-header">
+                                      <h5 class="modal-title">Product Info</h5>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                      </button>
+                                    </div>
+                                    <div class="modal-body">
+
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="form-group">
+                                                <label>Product Name</label>
+                                                <input type="text" class="form-control" value="{{pro.name}}" disabled>
+                                                </div>
+                                           
+                                                <div class="form-group">
+                                                <label>Price</label>
+                                                <input type="text" class="form-control" value="{{pro.price}}"  disabled>
+                                                </div>
+                                            
+                                                <div class="form-group">
+                                                <label>Unit</label>
+                                                <input type="text" class="form-control" value="{{pro.unit}}" disabled>
+                                                </div>
+                                            
+                                                <div class="form-group">
+                                                <label>Description</label>
+                                                <input type="text" class="form-control" value="{{pro.description}}" disabled>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                      <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <!-- /.modal -->
+                        {% endfor %}
+                        
+                    </tbody>
+                </table>
+                </div>
+                <!-- /.card-body -->
+            </div>
+
+        </div>
+    </section>
+
+
+
+    {% for pro in product %}
+        
+        <form action="{% url 'Product_deleteProduct' pro.id %}" method="POST">
+            {% csrf_token %}
+            <div class="modal fade" id="modal-info-delete-product{{pro.id}}">
+                <div class="modal-dialog ">
+                <div class="modal-content bg-info">
+                    <div class="modal-header">
+                    <h4 class="modal-title">Alert Delete Product</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    <div class="modal-body">
+                    <p> Are you Sure Delete "<a class="btn-outline-warning" style="font-weight: bold;" > {{pro.name}} &hellip; </a> " Data&hellip;</p>
+                    </div>
+                    <div class="modal-footer justify-content-between col-12">
+                        <div class="row col-12">
+                            <button type="button" class="btn  btn-outline-primary btn-md  col-6" style="font-weight: bold;" data-dismiss="modal">Cancel</button>
+                            <input type="submit" class="btn  btn-outline-danger btn-md  col-6" style="font-weight: bold;" value="Delete">
+                        </div>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+            <!-- /.modal -->
+        </form>
+        
+    {% endfor %}
+
+
+{% endblock %}
+
+{% block endscript %}
+<!-- Page specific script -->
+<script>
+    $(function () {
+      $("#example1").DataTable({
+        "responsive": true, "lengthChange": false, "autoWidth": false,
+        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+      }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+      $('#example2').DataTable({
+        "paging": true,
+        "lengthChange": false,
+        "searching": false,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+        "responsive": true,
+      });
+    });
+  </script>
+
+{% endblock %}  

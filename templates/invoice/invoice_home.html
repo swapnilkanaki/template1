@@ -1,0 +1,230 @@
+{% extends "dashboard/index_layout.html" %}
+{% load static %}
+{% block title %} Invoice {% endblock %}
+
+  
+{% block content %} 
+    <section class="content-header">
+        <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+            <h1>Invoice</h1>
+            </div>
+            <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item active">Widgets</li>
+            </ol>
+            </div>
+        </div>
+        </div>
+    </section>
+    
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 text-right">
+                    <a href="/Invoice_addInvoice" class="btn btn-info">Add New Invoice</a>
+                </div>
+            </div>
+            <div>
+                {% if messages %}          
+                {% for message in messages %}
+                <div class="alert {{ message.tags }} alert-dismissible" id="msg" role="alert">
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                  {{ message }}
+                </div>
+                {% endfor %}
+                {% endif %} 
+              </div>
+
+            <div class="card mt-2" style="border: solid 2px #3330cc;">
+                <div class="card-header bg-primary">
+                <h3 class="card-title">Invoice List</h3>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                <table id="example1" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>DATE</th>
+                            <th>INVOICE NO</th>
+                            <th>CUSTOMER</th> 
+                            <th>TOTAL</th> 
+                            <th>ACTIONS</th> 
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for inv in invoice %}
+                            <tr>
+                                <td>{{inv.inv_date}}</td>
+                                <td>{{inv.inv_no}}</td>
+                                <td>{{inv.customer_id}}</td>
+                                <td>{{inv.totalamount}}</td>
+                                <td>
+                                    <div class="row"><!--invimate_updateinvimate/{{inv.id}}-->
+                                        <a href="Invoice_updateInvoice/{{inv.id}}" class="btn btn-warning btn-sm d-inline"> Edit </a>
+                                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modal-info-delete-product{{inv.id}}">
+                                             Delete
+                                        </button>
+                                        <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#modal-info{{inv.id}}">
+                                            View
+                                        </button>
+
+                                    </div>
+                                    
+                                </td>
+                            </tr>
+
+                            <div class="modal fade" id="modal-info{{inv.id}}">
+                                <div class="modal-dialog modal-lg">
+                                  <div class="modal-content bg-info">
+                                    <div class="modal-header">
+                                      <h5 class="modal-title">Invoice Info</h5>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                      </button>
+                                    </div>
+                                    <div class="modal-body">
+
+                                        <div class="row">
+                                            <div class="form-group col-sm-4">
+                                                <label>Invoice Name</label>
+                                                <input type="text" class="form-control" value="{{inv.customer_id}}" disabled>
+                                            </div>
+                                            <div class="form-group col-sm-4">
+                                                <label>Invoice Date</label>
+                                                <input type="text" class="form-control" value="{{inv.inv_date}}"  disabled>
+                                            </div>
+                                            <div class="form-group col-sm-4">
+                                                <label>Due Date</label>
+                                                <input type="text" class="form-control" value="{{inv.due_date}}" disabled>
+                                            </div>
+                                            <div class="form-group col-sm-4">
+                                                <label>Invoice Number</label>
+                                                <input type="text" class="form-control" value="{{inv.inv_no}}" disabled>
+                                            </div>
+                                            <div class="form-group col-sm-4">
+                                                <label>Referance Number</label>
+                                                <input type="text" class="form-control" value="{{inv.ref_no}}" disabled>
+                                            </div>
+
+                                            <div class="form-group col-sm-4">
+                                                <label>Item Id</label>
+                                                <input type="text" class="form-control" value="{{inv.items}}" disabled>
+                                            </div>
+                                            <div class="form-group col-sm-4">
+                                                <label>Item Quantity</label>
+                                                <input type="text" class="form-control" value="{{inv.quantitys}}" disabled>
+                                            </div>
+                                            <div class="form-group col-sm-4">
+                                                <label>Price</label>
+                                                <input type="text" class="form-control" value="{{inv.price}}" disabled>
+                                            </div>
+                                            <div class="form-group col-sm-4">
+                                                <label>Discount</label>
+                                                <input type="text" class="form-control" value="{{inv.discount}}" disabled>
+                                            </div>
+                                            <div class="form-group col-sm-4">
+                                                <label>Amount</label>
+                                                <input type="text" class="form-control" value="{{inv.amount}}" disabled>
+                                            </div>
+
+                                            <div class="form-group col-sm-4">
+                                                <label>Notes</label>
+                                                <input type="text" class="form-control" value="{{inv.notes}}" disabled>
+                                            </div>
+                                            <div class="form-group col-sm-4">
+                                                <label>Sub Total</label>
+                                                <input type="text" class="form-control" value="{{inv.subtotal}}" disabled>
+                                            </div>
+                                            <div class="form-group col-sm-4">
+                                                <label>Tax</label>
+                                                <input type="text" class="form-control" value="{{inv.tax}}" disabled>
+                                            </div>
+                                            <div class="form-group col-sm-4">
+                                                <label>Total Amount</label>
+                                                <input type="text" class="form-control" value="{{inv.totalamount}}" disabled>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="modal-footer">
+                                      <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <!-- /.modal -->
+                        {% endfor %}
+                        
+                    </tbody>
+                </table>
+                </div>
+                <!-- /.card-body -->
+            </div>
+
+        </div>
+    </section>
+
+
+
+    {% for inv in invoice %}
+            
+        <form action="{% url 'Invoice_deleteInvoice' inv.id %}" method="POST">
+            {% csrf_token %}
+            <div class="modal fade" id="modal-info-delete-product{{inv.id}}">
+                <div class="modal-dialog ">
+                <div class="modal-content bg-info">
+                    <div class="modal-header">
+                    <h4 class="modal-title">Alert Delete Invoice</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    </div>
+                    <div class="modal-body">
+                    <p> Are you Sure Delete "<a class="btn-outline-warning" style="font-weight: bold;" > {{inv.inv_no}} &hellip; </a> " Data&hellip;</p>
+                    </div>
+                    <div class="modal-footer justify-content-between col-12">
+                        <div class="row col-12">
+                            <button type="button" class="btn  btn-outline-primary btn-md  col-6" style="font-weight: bold;" data-dismiss="modal">Cancel</button>
+                            <input type="submit" class="btn  btn-outline-danger btn-md  col-6" style="font-weight: bold;" value="Delete">
+                        </div>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+            <!-- /.modal -->
+        </form>
+    {% endfor %}
+
+
+{% endblock %}
+
+{% block endscript %}
+<!-- Page specific script -->
+<script>
+    $(function () {
+      $("#example1").DataTable({
+        "responsive": true, "lengthChange": false, "autoWidth": false,
+        "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+      }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+      $('#example2').DataTable({
+        "paging": true,
+        "lengthChange": false,
+        "searching": false,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+        "responsive": true,
+      });
+    });
+  </script>
+
+{% endblock %}  

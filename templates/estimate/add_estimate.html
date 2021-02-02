@@ -1,0 +1,336 @@
+{% extends "dashboard/index_layout.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block title %} Add Estimate {% endblock %}
+
+  
+{% block content %}
+<script>
+    var count={{productcount}};
+    var count2=1;
+</script>
+    <section class="content-header">
+        <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+            <h1>Add New Estimate</h1>
+            </div>
+            <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                <li class="breadcrumb-item active">Widgets</li>
+            </ol>
+            </div>
+        </div>
+        </div>
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 text-right">
+                    <a href="/Estimate_viewEstimate" class="btn btn-info">Estimates</a>
+                </div>
+            </div>
+            <div>
+                {% if messages %}          
+                {% for message in messages %}
+                <div class="alert {{ message.tags }} alert-dismissible mt-2" role="alert" id="msg">
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                  {{ message }}
+                </div>
+                {% endfor %}
+                {% endif %} 
+            </div>
+
+            <form action="" method="POST" autocomplete="on">
+                {% csrf_token %}
+                <div class="card card-default mt-2" style="border: solid 2px #1a17ce;">
+                    <div class="card-header bg-primary">
+                    <h3 class="card-title">Estimate Basic Info</h3>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-tool" data-card-widget="remove">
+                        <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    {{ form.customer_id|as_crispy_field }}
+                                </div>
+                                <div class="form-group">
+                                    {{ form.esti_no|as_crispy_field }}
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group date">
+                                    {{ form.esti_date|as_crispy_field }}
+                                </div>
+                                <div class="form-group">
+                                    {{ form.ref_no|as_crispy_field }}
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    {{ form.due_date|as_crispy_field }}
+                                </div>
+                            </div>
+
+                                
+                            {% if update %}
+                                <div class="row col-md-12 ml-1" id="itemcon"  style="border: solid 2px #686868e7;">
+                                    <div class="row col-md-2 ml-md-2">
+                                        {% for i in itemname %} 
+                                                <div id="item1" class="form-group">ITEMS
+                                                    <input type="text"  class='form-control' value={{i}}  disabled>
+                                                </div>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="row col-md-2 ml-md-4">
+                                        {% for i in quantitys %}
+                                                <div id="item1" class="form-group">QUANTITY
+                                                    <input type="text"  class='form-control' value={{i}}  disabled>
+                                                </div>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="row col-md-2 ml-md-4">
+                                        {% for i in price %}
+                                                <p id="item1" class="form-group">PRICE
+                                                    <input type="text"  class='form-control' value={{i}}  disabled>
+                                                </p>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="row col-md-2 ml-md-4">
+                                        {% for i in discount %}
+                                                <p id="item1" class="form-group">DISCOUNT
+                                                    <input type="text"  class='form-control' value={{i}}  disabled>
+                                                </p>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="row col-md-2 ml-md-4">
+                                        {% for i in amount %}
+                                                <p id="item1" class="form-group">AMOUNT
+                                                    <input type="text"  class='form-control' value={{i}}  disabled>
+                                                </p>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                
+                                <input type="text" name="update" value="True" hidden id="">
+
+                            {% else %}
+
+                                
+                                <div class="row col-12 ml-1" id="itemcon" style="border: solid 2px #686868e7;">
+                                    <p>
+                                    <p id="item1" class="col-md-4">ITEMS
+                                        <select class='custom-select form-control' required  onclick='selectedval(0)' id='itemid0' name="itemid0" >
+                                            <option value='---------------'> SELECT ITEM </option>
+                                            {% for pro in product %}  
+                                            <option value='{{ pro.id }},{{ pro.price }}'> {{ pro.name }} </option> 
+                                            {% endfor %}   
+                                        </select>    
+                                        <input type="text" name="itm0" id="itm0" required  hidden>                                                                  
+                                    </p>
+                                    <p id="item2" class="col-md-2">QUANTITY
+                                        <input type='number' value='1' onclick='selectedval(0)' id='itemquantity0' name="itemquantity0" required class='form-control'>                                    
+                                    </p>
+                                    <p id="item3" class="col-md-2">PRICE
+                                        <input type='number' value='' id='priceitem0' name="priceitem0" required class='form-control'>                                   
+                                    </p>
+                                    <p id="item4" class="col-md-2">DISCOUNT
+                                        <input type='number' value='' onclick='selectedval(0)' id='itemdiscount0' name="itemdiscount0" class='form-control'>                                 
+                                    </p>
+                                    <p id="item5" class="col-md-2">AMOUNT
+                                        <input type='number' value='' id='itemamount0' required name="itemamount0" class='form-control'>                                 
+                                    </p>
+                                </p>
+                                    
+                                </div>
+                                <a onclick="additem()" class="btn bg-gradient-success"><i class="fas fa-times"></i></a>
+
+                                <script type='text/javascript'>
+                                    function additem(){
+                                        if(count2 < count){
+                                        
+                                            var con = document.getElementById("item1");
+                                            var par=document.createElement("p");
+                                            par.innerHTML="<select class='custom-select form-control'  onclick='selectedval("+count2+")' id='itemid"+count2+"' required> <option value='---------------'> SELECT ITEM </option> {% for pro in product %}  <option value='{{ pro.id }},{{ pro.price }}'> {{ pro.name }} </option>  {% endfor %}   </select>   <input type='text' name='itm"+count2+"' id='itm"+count2+"' required hidden>";
+                                            con.appendChild(par);
+
+                                            var con = document.getElementById("item2");
+                                            var par=document.createElement("p");
+                                            par.innerHTML="<input type='number' value='1' onclick='selectedval("+count2+")' id='itemquantity"+count2+"' name='itemquantity"+count2+"' required class='form-control'>";
+                                            con.appendChild(par);
+
+                                            var con = document.getElementById("item3");
+                                            var par=document.createElement("p");
+                                            par.innerHTML="<input type='number' value='' id='priceitem"+count2+"' name='priceitem"+count2+"' required class='form-control'>";
+                                            con.appendChild(par);
+
+                                            var con = document.getElementById("item4");
+                                            var par=document.createElement("p");
+                                            par.innerHTML="<input type='number' value='' onclick='selectedval("+count2+")' name='itemdiscount"+count2+"' id='itemdiscount"+count2+"' class='form-control'>";
+                                            con.appendChild(par);
+
+                                            var con = document.getElementById("item5");
+                                            var par=document.createElement("p");
+                                            par.innerHTML="<input type='number' value='' id='itemamount"+count2+"' name='itemamount"+count2+"' required class='form-control'>";
+                                            con.appendChild(par);
+                                            count2+=1;
+
+                                            //alert(count2);
+                                            document.getElementById("coun").value=count2;
+                                        }
+                                    }
+                                    function selectedval(count2){
+                                            var a=String(document.getElementById("itemid"+count2).value);
+                                            var data=a.split(",");
+                                            //alert("itemid"+count2);
+                                            //alert(data);
+
+                                            document.getElementById("priceitem"+count2).value = (parseInt(data[1]) * parseInt(document.getElementById("itemquantity"+count2).value));
+                                            if(document.getElementById("itemdiscount"+count2).value)   {
+                                                if(document.getElementById("priceitem"+count2).value > 0) {                                                
+                                                    var dis =((document.getElementById("priceitem"+count2).value * document.getElementById("itemdiscount"+count2).value) / 100);
+                                                    document.getElementById("itemamount"+count2).value = (document.getElementById("priceitem"+count2).value - dis);
+                                                }
+                                            }
+                                            else {
+                                                document.getElementById("itemamount"+count2).value = document.getElementById("priceitem"+count2).value;
+                                            }
+                                            document.getElementById("itm"+count2).value=data[0];
+                                    }
+                                    function clasubtotal(){
+                                        var total=0;
+                                        for(var i=0;i< count2 ; i++){
+                                            total+=parseInt(document.getElementById("itemamount"+i).value);
+                                        }
+                                        document.getElementById("subtotal").value=total;
+                                        document.getElementById("totalamount").value=total;
+                                    }
+
+                                </script>
+                                <input type="text" name="update" value="False" hidden id="">
+                            
+
+                            {% endif %}
+
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    {{ form.notes|as_crispy_field }}
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    {{ form.subtotal|as_crispy_field }}
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    {{ form.tax|as_crispy_field }}
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    {{ form.totalamount|as_crispy_field }}
+                                </div>
+                            </div>
+                            <!-- /.col -->
+                        </div>
+                        <!-- /.row -->
+
+                    <input type="hidden" name="coun" id="coun" value="0">
+        
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+            
+                <script>
+                    $(function(){
+                        $('#esti_date').datetimepicker();
+                    });
+                </script>
+                <div class="row m-2">
+                    <div class="col-12 text-right mr-2 mb-2 offset-9">
+                        <button type="submit" class="btn btn-block btn-outline-success col-3" > Submit </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <script>
+        var now = new Date();
+        var month = (now.getMonth() + 1);               
+        var day = now.getDate();
+        if (month < 10) 
+            month = "0" + month;
+        if (day < 10) 
+            day = "0" + day;
+        var today = day + '-' + month + '-' + now.getFullYear();
+        document.getElementById("esti_date").value= today;
+
+       // this is for genarate estimate id       
+        var pid=0;
+        {% for pro in estimatedata %}  
+        pid= {{ pro.id }};
+        {% endfor %}
+        var refno= String('E'+ String(now.getFullYear()).slice(2,4) + month + day +(pid+1));
+        document.getElementById("esti_no").value= refno;
+
+       // this is for genarate next month       
+        var todayfornext = month+'/'+day+'/'+now.getFullYear();
+
+        Date.isLeapYear = function (year) { 
+            return (((year % 4 === 0) && (year % 100 !== 0)) || (year % 400 === 0)); 
+        };
+
+        Date.getDaysInMonth = function (year, month) {
+            return [31, (Date.isLeapYear(year) ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month];
+        };
+
+        Date.prototype.isLeapYear = function () { 
+            return Date.isLeapYear(this.getFullYear()); 
+        };
+
+        Date.prototype.getDaysInMonth = function () { 
+            return Date.getDaysInMonth(this.getFullYear(), this.getMonth());
+        };
+
+        Date.prototype.addMonths = function (value) {
+            var n = this.getDate();
+            this.setDate(1);
+            this.setMonth(this.getMonth() + value);
+            this.setDate(Math.min(n, this.getDaysInMonth()));
+            return this;
+        };
+        var myDate = new Date(todayfornext);
+        var nm=new Date(myDate.addMonths(1));
+
+        var month = (nm.getMonth() + 1);               
+        var day = nm.getDate();
+        if (month < 10) 
+            month = "0" + month;
+        if (day < 10) 
+            day = "0" + day;
+
+        var nextmonth= day + '-' + month + '-' + now.getFullYear() ;
+        document.getElementById("due_date").value= nextmonth;
+
+       
+
+
+    </script>
+   
+
+{% endblock %}
