@@ -26,10 +26,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'u(7x0xdd7l$38r^t)yq!_zw6am&qxpr^so++q+*p+=(=h%c(ye'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
-#ALLOWED_HOSTS = ['127.0.0.1','pro_invoice.com']
+#ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1','invoicedemoone.herokuapp.com']
 
 
 # Application definition
